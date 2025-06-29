@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Compass, Trophy, Plus, TrendingUp, TrendingDown } from "lucide-react";
+import { Compass, Trophy, Plus } from "lucide-react";
 import { Vault } from "./Vault";
 import { ConnectButton } from "thirdweb/react";
 import { client, citreaDevnet } from "../client";
@@ -13,73 +13,73 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const [logoSeed, setLogoSeed] = useState("");
-  const [bitcoinPrice, setBitcoinPrice] = useState<number>(0);
-  const [priceChange, setPriceChange] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
+  // const [bitcoinPrice, setBitcoinPrice] = useState<number>(0);
+  // const [priceChange, setPriceChange] = useState<number>(0);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [error, setError] = useState(false);
 
   useEffect(() => {
     // Generate a random seed on component mount (page reload)
     setLogoSeed(Math.random().toString(36).substring(2, 15));
 
-    // Fetch Bitcoin price immediately and then every 30 seconds
-    fetchBitcoinPrice();
-    const interval = setInterval(fetchBitcoinPrice, 30000);
-    return () => clearInterval(interval);
+    // // Fetch Bitcoin price immediately and then every 30 seconds
+    // fetchBitcoinPrice();
+    // const interval = setInterval(fetchBitcoinPrice, 30000);
+    // return () => clearInterval(interval);
   }, []);
 
-  const fetchBitcoinPrice = async () => {
-    try {
-      setError(false);
-      // Using CoinGecko API which supports CORS
-      const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true"
-      );
+  // const fetchBitcoinPrice = async () => {
+  //   try {
+  //     setError(false);
+  //     // Using CoinGecko API which supports CORS
+  //     const response = await fetch(
+  //       "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true"
+  //     );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch price");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch price");
+  //     }
 
-      const data = await response.json();
-      const newPrice = data.bitcoin.usd;
-      const change24h = data.bitcoin.usd_24h_change || 0;
+  //     const data = await response.json();
+  //     const newPrice = data.bitcoin.usd;
+  //     const change24h = data.bitcoin.usd_24h_change || 0;
 
-      // Calculate price change based on 24h change percentage
-      const changeAmount = (newPrice * change24h) / 100;
+  //     // Calculate price change based on 24h change percentage
+  //     const changeAmount = (newPrice * change24h) / 100;
 
-      setBitcoinPrice(newPrice);
-      setPriceChange(changeAmount);
-      setIsLoading(false);
-    } catch (err) {
-      console.error("Error fetching Bitcoin price:", err);
-      setError(true);
+  //     setBitcoinPrice(newPrice);
+  //     setPriceChange(changeAmount);
+  //     setIsLoading(false);
+  //   } catch (err) {
+  //     console.error("Error fetching Bitcoin price:", err);
+  //     setError(true);
 
-      // Use fallback price for demo if this is the first load
-      if (bitcoinPrice === 0) {
-        setBitcoinPrice(67234.56);
-        setPriceChange(1234.56);
-      }
-      setIsLoading(false);
-    }
-  };
+  //     // Use fallback price for demo if this is the first load
+  //     if (bitcoinPrice === 0) {
+  //       setBitcoinPrice(67234.56);
+  //       setPriceChange(1234.56);
+  //     }
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
+  // const formatPrice = (price: number) => {
+  //   return new Intl.NumberFormat("en-US", {
+  //     style: "currency",
+  //     currency: "USD",
+  //     minimumFractionDigits: 0,
+  //     maximumFractionDigits: 0,
+  //   }).format(price);
+  // };
 
-  const formatPriceChange = (change: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(Math.abs(change));
-  };
+  // const formatPriceChange = (change: number) => {
+  //   return new Intl.NumberFormat("en-US", {
+  //     style: "currency",
+  //     currency: "USD",
+  //     minimumFractionDigits: 0,
+  //     maximumFractionDigits: 0,
+  //   }).format(Math.abs(change));
+  // };
 
   const navItems = [
     {

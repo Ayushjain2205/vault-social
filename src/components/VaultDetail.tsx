@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Users, Share, Wallet, Clock } from 'lucide-react';
-import { Vault } from '../types';
-import { Vault as VaultIcon } from './Vault';
+import React, { useState } from "react";
+import { ArrowLeft, Users, Share, Wallet } from "lucide-react";
+import { Vault } from "../types";
+import { Vault as VaultIcon } from "./Vault";
 
 interface VaultDetailProps {
   vault: Vault;
@@ -9,8 +9,12 @@ interface VaultDetailProps {
   onJoinVault: (vaultId: string, amount: number) => void;
 }
 
-const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault }) => {
-  const [joinAmount, setJoinAmount] = useState<string>('');
+const VaultDetail: React.FC<VaultDetailProps> = ({
+  vault,
+  onBack,
+  onJoinVault,
+}) => {
+  const [joinAmount, setJoinAmount] = useState<string>("");
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -23,7 +27,7 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
     if (amount > 0) {
       onJoinVault(vault.id, amount);
       setShowJoinModal(false);
-      setJoinAmount('');
+      setJoinAmount("");
     }
   };
 
@@ -33,21 +37,25 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
   };
 
   const formatValue = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(value);
   };
 
   const formatTimeLeft = (timestamp?: number) => {
-    if (!timestamp) return '';
+    if (!timestamp) return "";
     const now = Date.now();
     const diff = timestamp - now;
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    return days > 0 ? `${days}d ${hours}h` : hours > 0 ? `${hours}h` : 'Unlocked';
+    return days > 0
+      ? `${days}d ${hours}h`
+      : hours > 0
+      ? `${hours}h`
+      : "Unlocked";
   };
 
   return (
@@ -65,12 +73,16 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
             <div className="flex items-center">
               <VaultIcon seed={vault.id} size="sm" className="mr-6" />
               <div>
-                <h1 className="text-5xl font-playful font-bold text-gray-800">{vault.name}</h1>
-                <p className="text-gray-600 text-xl font-medium">by @{vault.creator}</p>
+                <h1 className="text-5xl font-playful font-bold text-gray-800">
+                  {vault.name}
+                </h1>
+                <p className="text-gray-600 text-xl font-medium">
+                  by @{vault.creator}
+                </p>
               </div>
             </div>
           </div>
-          
+
           <button
             onClick={handleShare}
             className="p-4 bg-white rounded-2xl hover:bg-gray-50 transition-colors shadow-md border-2 border-gray-200"
@@ -93,9 +105,11 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
                     ● Active
                   </span>
                 </div>
-                {vault.type === 'Time-Locked' && vault.unlockTimestamp && (
+                {vault.type === "Time-Locked" && vault.unlockTimestamp && (
                   <div className="text-center bg-orange-100 rounded-2xl p-4 border-2 border-orange-200">
-                    <div className="text-sm text-orange-600 font-bold">Unlocks In</div>
+                    <div className="text-sm text-orange-600 font-bold">
+                      Unlocks In
+                    </div>
                     <div className="text-2xl font-playful font-bold text-orange-600">
                       {formatTimeLeft(vault.unlockTimestamp)}
                     </div>
@@ -105,11 +119,15 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center p-6 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl border-2 border-green-200">
-                  <div className="text-4xl font-playful font-bold text-green-800">{formatValue(vault.totalValue)}</div>
+                  <div className="text-4xl font-playful font-bold text-green-800">
+                    {formatValue(vault.totalValue)}
+                  </div>
                   <div className="text-green-600 font-bold">Total Value</div>
                 </div>
                 <div className="text-center p-6 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl border-2 border-blue-200">
-                  <div className="text-4xl font-playful font-bold text-blue-800">{vault.members.length}</div>
+                  <div className="text-4xl font-playful font-bold text-blue-800">
+                    {vault.members.length}
+                  </div>
                   <div className="text-blue-600 font-bold">Members</div>
                 </div>
               </div>
@@ -123,13 +141,17 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
               </h2>
               <div className="space-y-4">
                 {vault.members.map((member, index) => (
-                  <div key={member.id} className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl border-2 border-gray-200">
+                  <div
+                    key={member.id}
+                    className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl border-2 border-gray-200"
+                  >
                     <div>
                       <div className="font-bold text-lg text-gray-800">
                         {member.nickname}
                       </div>
                       <div className="text-sm text-gray-500 font-medium">
-                        {member.address.slice(0, 8)}...{member.address.slice(-8)}
+                        {member.address.slice(0, 8)}...
+                        {member.address.slice(-8)}
                       </div>
                       <div className="text-sm text-gray-400">
                         Joined {member.joinedAt.toLocaleDateString()}
@@ -139,14 +161,22 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
                       <div className="font-bold text-lg text-gray-800">
                         ₿{member.contribution.toFixed(3)}
                       </div>
-                      {vault.type === 'Group' && member.sharePercentage && (
+                      {vault.type === "Group" && member.sharePercentage && (
                         <div className="text-sm text-purple-600 font-bold">
                           {member.sharePercentage}% share
                         </div>
                       )}
-                      {vault.type === 'Copy' && (
-                        <div className={`text-sm font-bold ${member.isFollowing ? 'text-green-600' : 'text-gray-400'}`}>
-                          {member.isFollowing ? '✓ Following' : '✗ Not following'}
+                      {vault.type === "Copy" && (
+                        <div
+                          className={`text-sm font-bold ${
+                            member.isFollowing
+                              ? "text-green-600"
+                              : "text-gray-400"
+                          }`}
+                        >
+                          {member.isFollowing
+                            ? "✓ Following"
+                            : "✗ Not following"}
                         </div>
                       )}
                       {index === 0 && (
@@ -168,7 +198,7 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
               <h3 className="text-2xl font-playful font-bold mb-4 text-gray-800">
                 Join This Vault 🚀
               </h3>
-              
+
               {!isConnected ? (
                 <button
                   onClick={handleConnectWallet}
@@ -202,15 +232,26 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
                   <span className="text-gray-600 font-medium">Created</span>
-                  <span className="font-bold text-gray-800">{vault.createdAt.toLocaleDateString()}</span>
+                  <span className="font-bold text-gray-800">
+                    {vault.createdAt.toLocaleDateString()}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
                   <span className="text-gray-600 font-medium">Type</span>
                   <span className="font-bold text-gray-800">{vault.type}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
-                  <span className="text-gray-600 font-medium">Avg Contribution</span>
-                  <span className="font-bold text-gray-800">₿{(vault.totalValue / Math.max(vault.members.length, 1) / 50000).toFixed(3)}</span>
+                  <span className="text-gray-600 font-medium">
+                    Avg Contribution
+                  </span>
+                  <span className="font-bold text-gray-800">
+                    ₿
+                    {(
+                      vault.totalValue /
+                      Math.max(vault.members.length, 1) /
+                      50000
+                    ).toFixed(3)}
+                  </span>
                 </div>
               </div>
             </div>
@@ -224,10 +265,14 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onBack, onJoinVault })
           <div className="bg-white rounded-3xl p-8 max-w-md w-full border-2 border-gray-200 shadow-2xl">
             <div className="text-center mb-6">
               <div className="text-6xl mb-4">🎉</div>
-              <h3 className="text-3xl font-playful font-bold mb-2 text-gray-800">Join {vault.name}</h3>
-              <p className="text-gray-600 font-medium text-lg">Enter your contribution amount:</p>
+              <h3 className="text-3xl font-playful font-bold mb-2 text-gray-800">
+                Join {vault.name}
+              </h3>
+              <p className="text-gray-600 font-medium text-lg">
+                Enter your contribution amount:
+              </p>
             </div>
-            
+
             <div className="mb-6">
               <label className="block text-xl font-bold text-gray-700 mb-3">
                 Amount (BTC)

@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import LandingPage from './components/LandingPage';
-import ExplorePage from './components/ExplorePage';
-import CreateVault from './components/CreateVault';
-import VaultDetail from './components/VaultDetail';
-import Leaderboard from './components/Leaderboard';
-import Navbar from './components/Navbar';
-import { Vault, CreateVaultData, Member } from './types';
-import { mockVaults, generateVaultId } from './utils/mockData';
+import { useState } from "react";
+import LandingPage from "./components/LandingPage";
+import ExplorePage from "./components/ExplorePage";
+import CreateVault from "./components/CreateVault";
+import VaultDetail from "./components/VaultDetail";
+import Leaderboard from "./components/Leaderboard";
+import Navbar from "./components/Navbar";
+import { Vault, CreateVaultData, Member } from "./types";
+import { mockVaults, generateVaultId } from "./utils/mockData";
 
-type AppView = 'landing' | 'explore' | 'leaderboard' | 'create' | 'detail';
+type AppView = "landing" | "explore" | "leaderboard" | "create" | "detail";
 
 function App() {
-  const [currentView, setCurrentView] = useState<AppView>('landing');
+  const [currentView, setCurrentView] = useState<AppView>("landing");
   const [vaults, setVaults] = useState<Vault[]>(mockVaults);
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
 
@@ -20,58 +20,68 @@ function App() {
       id: generateVaultId(),
       name: data.name,
       type: data.type,
-      creator: 'You',
+      creator: "You",
       createdAt: new Date(),
       members: [],
       totalValue: 0,
       isActive: true,
-      unlockTimestamp: data.unlockDuration 
-        ? Date.now() + (data.unlockDuration * 24 * 60 * 60 * 1000)
-        : undefined
+      unlockTimestamp: data.unlockDuration
+        ? Date.now() + data.unlockDuration * 24 * 60 * 60 * 1000
+        : undefined,
     };
 
-    setVaults(prev => [newVault, ...prev]);
-    setCurrentView('explore');
+    setVaults((prev) => [newVault, ...prev]);
+    setCurrentView("explore");
   };
 
   const handleJoinVault = (vaultId: string, amount: number) => {
-    const nicknames = ['CryptoNinja', 'MoonRider', 'WhaleWatcher', 'DiamondHands', 'TreasureHunter', 'RocketMan', 'GoldDigger'];
-    
+    const nicknames = [
+      "CryptoNinja",
+      "MoonRider",
+      "WhaleWatcher",
+      "DiamondHands",
+      "TreasureHunter",
+      "RocketMan",
+      "GoldDigger",
+    ];
+
     const newMember: Member = {
       id: generateVaultId(),
-      address: 'bc1quser' + Math.random().toString(36).substr(2, 12),
+      address: "bc1quser" + Math.random().toString(36).substr(2, 12),
       joinedAt: new Date(),
       contribution: amount,
       sharePercentage: Math.floor(Math.random() * 40) + 10,
       isFollowing: Math.random() > 0.5,
-      nickname: nicknames[Math.floor(Math.random() * nicknames.length)]
+      nickname: nicknames[Math.floor(Math.random() * nicknames.length)],
     };
 
-    setVaults(prev => prev.map(vault => {
-      if (vault.id === vaultId) {
-        const updatedVault = {
-          ...vault,
-          members: [...vault.members, newMember],
-          totalValue: vault.totalValue + (amount * 50000) // Convert BTC to USD for display
-        };
-        
-        if (selectedVault?.id === vaultId) {
-          setSelectedVault(updatedVault);
+    setVaults((prev) =>
+      prev.map((vault) => {
+        if (vault.id === vaultId) {
+          const updatedVault = {
+            ...vault,
+            members: [...vault.members, newMember],
+            totalValue: vault.totalValue + amount * 50000, // Convert BTC to USD for display
+          };
+
+          if (selectedVault?.id === vaultId) {
+            setSelectedVault(updatedVault);
+          }
+
+          return updatedVault;
         }
-        
-        return updatedVault;
-      }
-      return vault;
-    }));
+        return vault;
+      })
+    );
   };
 
   const handleSelectVault = (vault: Vault) => {
     setSelectedVault(vault);
-    setCurrentView('detail');
+    setCurrentView("detail");
   };
 
   const handleGetStarted = () => {
-    setCurrentView('explore');
+    setCurrentView("explore");
   };
 
   const handleNavigate = (view: AppView) => {
@@ -80,42 +90,36 @@ function App() {
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case 'landing':
+      case "landing":
         return <LandingPage onGetStarted={handleGetStarted} />;
-      
-      case 'create':
+
+      case "create":
         return (
           <CreateVault
-            onBack={() => setCurrentView('explore')}
+            onBack={() => setCurrentView("explore")}
             onCreateVault={handleCreateVault}
           />
         );
-      
-      case 'detail':
+
+      case "detail":
         return selectedVault ? (
           <VaultDetail
             vault={selectedVault}
-            onBack={() => setCurrentView('explore')}
+            onBack={() => setCurrentView("explore")}
             onJoinVault={handleJoinVault}
           />
         ) : null;
 
-      case 'leaderboard':
+      case "leaderboard":
         return (
-          <Leaderboard
-            vaults={vaults}
-            onSelectVault={handleSelectVault}
-          />
+          <Leaderboard vaults={vaults} onSelectVault={handleSelectVault} />
         );
-      
-      case 'explore':
+
+      case "explore":
         return (
-          <ExplorePage
-            vaults={vaults}
-            onSelectVault={handleSelectVault}
-          />
+          <ExplorePage vaults={vaults} onSelectVault={handleSelectVault} />
         );
-      
+
       default:
         return <LandingPage onGetStarted={handleGetStarted} />;
     }
@@ -123,10 +127,7 @@ function App() {
 
   return (
     <div className="App font-friendly">
-      <Navbar 
-        currentView={currentView}
-        onNavigate={handleNavigate}
-      />
+      <Navbar currentView={currentView} onNavigate={handleNavigate} />
       {renderCurrentView()}
     </div>
   );
